@@ -19,6 +19,10 @@ namespace ariel {
 
 
     public:
+        Player(const Player& o){}
+        Player(Player&& o) noexcept{}
+        Player& operator=(const Player& other){return *this;}
+        Player& operator=(Player&& other) noexcept {return *this;}
         Player(string name);// constructor
         ~Player();
 
