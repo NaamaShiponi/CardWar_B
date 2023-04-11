@@ -13,9 +13,9 @@ using namespace ariel;
 
 Game::Game(Player &p1, Player &p2) : player1(p1), player2(p2),severalTurns(0), draws(0) 
 {
-   
     createPileCards();
 }
+
 
 void Game::createPileCards()
 {
@@ -44,6 +44,8 @@ void Game::createPileCards()
 
 void Game::playTurn()
 {
+    CTSp1.clear();
+    CTSp2.clear();
     if (player1.getname() == player2.getname())
     {
         throw std::exception();
@@ -52,15 +54,12 @@ void Game::playTurn()
     {
         throw std::exception();
     }
-    vector<Card> CTSp1;
-    vector<Card> CTSp2;
+
     bool inTurn = true;
     while (inTurn && player1.stacksize() != 0 && player2.stacksize() != 0)
     {
         CTSp1.push_back(player1.popCardsStack());
         CTSp2.push_back(player2.popCardsStack());
-        cout << "cards stack P1 " << CTSp1.rbegin()->getNum() << endl;
-        cout << "cards stack P2 " << CTSp2.rbegin()->getNum() << endl;
 
         if (CTSp1.rbegin()->getNum() != CTSp2.rbegin()->getNum())
         {
@@ -69,24 +68,21 @@ void Game::playTurn()
         else if (player1.stacksize() != 0 && player2.stacksize() != 0)
         {
             this->draws++;
-            cout << "draw !!" << endl;
             CTSp1.push_back(player1.popCardsStack());
             CTSp2.push_back(player2.popCardsStack());
         }
         this->severalTurns++;
-
     }
     if (inTurn)
     {
-        cout << "draw" << endl;
 
-        for (auto i = CTSp2.begin(); i != CTSp2.end(); ++i)
-        {
-            this->player2.addToCardesTaken(*i);
-        }
         for (auto i = CTSp1.begin(); i != CTSp1.end(); ++i)
         {
-            this->player1.addToCardesTaken(*i);
+            player1.addToCardesTaken(*i);
+        }
+        for (auto i = CTSp2.begin(); i != CTSp2.end(); ++i)
+        {
+            player2.addToCardesTaken(*i);
         }
     }
     /*
@@ -94,35 +90,27 @@ void Game::playTurn()
     */
     else if ((CTSp1.rbegin()->getNum() > 2 && CTSp2.rbegin()->getNum() == 1) || (CTSp1.rbegin()->getNum() != 1 && CTSp1.rbegin()->getNum() < CTSp2.rbegin()->getNum()))
     {
-        cout << "P2 is the Winer" << endl;
         this->player2.setnumberOfWins(this->player2.getnumberOfWins()+1);
-        for (auto i = CTSp2.begin(); i != CTSp2.end(); ++i)
-        {
-            this->player2.addToCardesTaken(*i);
-        }
-        for (auto i = CTSp1.begin(); i != CTSp1.end(); ++i)
-        {
-            this->player2.addToCardesTaken(*i);
-        }
+        addCardsToTaken(player2,CTSp1,CTSp2);
     }
     else
     { // P1 is the Winer
-        cout << "P1 is the Winer" << endl;
         this->player1.setnumberOfWins(this->player1.getnumberOfWins()+1);
-        for (auto i = CTSp2.begin(); i != CTSp2.end(); ++i)
-        {
-            this->player1.addToCardesTaken(*i);
-        }
-        for (auto i = CTSp1.begin(); i != CTSp1.end(); ++i)
-        {
-            this->player1.addToCardesTaken(*i);
-        }
+        addCardsToTaken(player1,CTSp1,CTSp2);
     }
 
-    cout << "p1: stacksize " << this->player1.stacksize() << " cardesTaken " << this->player1.cardesTaken() << endl;
-    cout << "p2: stacksize " << this->player2.stacksize() << " cardesTaken " << this->player2.cardesTaken() << endl;
 
-    cout << "The Turn is over " << endl;
+    getStrTurn(log);
+
+}
+
+void Game::addCardsToTaken(Player& p, vector<Card> CTSp1, vector<Card> CTSp2 ){
+    while(CTSp1.size()>0 && CTSp2.size()>0){
+        p.addToCardesTaken(CTSp1.back());
+        CTSp1.pop_back();
+        p.addToCardesTaken(CTSp2.back());
+        CTSp2.pop_back();
+    }
 }
 
 void Game::playAll()
@@ -153,14 +141,53 @@ void Game::printWiner()
         cout << player2.getname() << " won the game" << endl;
     }
 }
-
 void Game::printLastTurn()
 {
+    string lastTurn="";
+    getStrTurn(lastTurn);
+    cout << endl << "----------- printLastTurn -----------"<< endl;
+    cout << endl << lastTurn;
+    cout << endl <<  "-----------------------------------------"<< endl;
+
 
 }
+void Game::getStrTurn(string& s)
+{
+    int numCardP1;
+    int numCardP2;
+    std::vector<Card>::size_type i= 0;
+    for ( ; i < CTSp1.size(); i++) 
+    {
+        if(i%2==0){
+            s=s+ "\nTurn number "+ to_string(severalTurns) + "\n";
+            numCardP1=CTSp1[i].getNum();
+            numCardP2=CTSp2[i].getNum();
+            s=s+ this->player1.getname()+ " played ";
+            s=s+ "(" + to_string(numCardP1) + " , " + to_string(CTSp1[i].getType()) + ") \n" ;
+            s=s+ this->player2.getname() + " played ";
+            s=s+ "(" + to_string(numCardP2) + " , " + to_string(CTSp2[i].getType()) + ") \n" ;
+            if(numCardP1==numCardP2 && i < CTSp1.size()){
+            s=s+ "DRAW \n";
+            }
+        }
+    }
+    if(numCardP1==numCardP2){
+        s=s+ "DRAW \n";
+    }
+    if((numCardP1 > 2 && numCardP2 == 1) || (numCardP1 != 1 && numCardP1 < numCardP2)){
+        s=s+ this->player2.getname() + " won \n";
+    }else{
+        s=s+ this->player1.getname() + " won \n";
+    }
+
+}
+
+
 void Game::printLog()
 {
-
+    cout << endl << "----------- printLog -----------"<< endl;
+    cout << endl << log;
+    cout << endl <<  "-------------------------------"<< endl;
 }
 void Game::printStats()
 {

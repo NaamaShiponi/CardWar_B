@@ -42,7 +42,7 @@ void Player::printStackPlayer(){
 }
 
 void Player::printCardesTaken(){
-    cout << "print stack OF player " << this->name << ": ";
+    cout << "print stack of player " << this->name << ": ";
     for (auto i = cardesTakenPlayer.begin(); i != cardesTakenPlayer.end(); ++i){
         cout << "(" << i->getNum() << " , " << i->getType() << ") " ;
     }
