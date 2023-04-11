@@ -221,7 +221,4 @@ void Game::printStats()
     cout <<  "-------------------------------------"<< endl;
 
 }
-Game::~Game()
-{
 
-}

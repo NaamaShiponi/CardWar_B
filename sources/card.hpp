@@ -9,16 +9,11 @@ namespace ariel {
         int num;
         int type;
     public:
-        Card();
-        Card(int num, int type);
-        Card(const Card& o);
-        Card(Card&& o) noexcept;
-        Card& operator=(const Card& other);
-        Card& operator=(Card&& other) noexcept;
-        ~Card();
-
+        Card(int num=0, int type=0);
+   
         int getNum() const;
         int getType() const;
+
     
     };
 };

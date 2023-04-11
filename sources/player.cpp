@@ -5,10 +5,11 @@
 using namespace std;
 using namespace ariel;
 
-Player::~Player(){
-    
+
+Player::Player(string name): name(name) // constructor
+{
+ this->numberOfWins= 0;
 }
-Player::Player(string name): name(name), numberOfWins(0){} // constructor
 
 int Player::stacksize(){
     return this->cardsStack.size();

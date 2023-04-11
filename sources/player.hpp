@@ -15,17 +15,12 @@ namespace ariel {
         string name;
         vector<Card> cardsStack;
         vector<Card> cardesTakenPlayer;
-        int numberOfWins=0;
+        int numberOfWins;
 
 
 
     public:
-        Player(const Player& o){}
-        Player(Player&& o) noexcept{}
-        Player& operator=(const Player& other){return *this;}
-        Player& operator=(Player&& other) noexcept {return *this;}
         Player(string name);// constructor
-        ~Player();
 
         string getname(){return this->name;}
         int getnumberOfWins()const{return this->numberOfWins;}
