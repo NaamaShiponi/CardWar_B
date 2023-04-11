@@ -33,6 +33,8 @@ namespace ariel {
         void addToStackPlayer(Card card);
         void addToCardesTaken(Card card);
 
+        Card popCardsStack();
+
         void printStackPlayer();
         void printCardesTaken();
 

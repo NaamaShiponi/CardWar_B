@@ -30,6 +30,11 @@ void Player::addToCardesTaken(Card card){
     cardesTakenPlayer.push_back(card);
 }
 
+Card Player::popCardsStack(){
+    Card card = cardsStack.back();
+    cardsStack.pop_back();
+    return card;
+}
 
 
 void Player::printStackPlayer(){
