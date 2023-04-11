@@ -11,8 +11,9 @@ using namespace std;
 
 using namespace ariel;
 
-Game::Game(Player &p1, Player &p2) : player1(p1), player2(p2)
+Game::Game(Player &p1, Player &p2) : player1(p1), player2(p2),severalTurns(0), draws(0) 
 {
+   
     createPileCards();
 }
 
@@ -67,10 +68,13 @@ void Game::playTurn()
         }
         else if (player1.stacksize() != 0 && player2.stacksize() != 0)
         {
+            this->draws++;
             cout << "draw !!" << endl;
             CTSp1.push_back(player1.popCardsStack());
             CTSp2.push_back(player2.popCardsStack());
         }
+        this->severalTurns++;
+
     }
     if (inTurn)
     {
@@ -91,7 +95,7 @@ void Game::playTurn()
     else if ((CTSp1.rbegin()->getNum() > 2 && CTSp2.rbegin()->getNum() == 1) || (CTSp1.rbegin()->getNum() != 1 && CTSp1.rbegin()->getNum() < CTSp2.rbegin()->getNum()))
     {
         cout << "P2 is the Winer" << endl;
-
+        this->player2.setnumberOfWins(this->player2.getnumberOfWins()+1);
         for (auto i = CTSp2.begin(); i != CTSp2.end(); ++i)
         {
             this->player2.addToCardesTaken(*i);
@@ -104,6 +108,7 @@ void Game::playTurn()
     else
     { // P1 is the Winer
         cout << "P1 is the Winer" << endl;
+        this->player1.setnumberOfWins(this->player1.getnumberOfWins()+1);
         for (auto i = CTSp2.begin(); i != CTSp2.end(); ++i)
         {
             this->player1.addToCardesTaken(*i);
@@ -130,6 +135,7 @@ void Game::playAll()
 
 void Game::printWiner()
 {
+    cout << endl;
     if (player1.stacksize() != 0 && player2.stacksize() != 0)
     {
         cout << "The game is not over yet" << endl;
@@ -150,6 +156,7 @@ void Game::printWiner()
 
 void Game::printLastTurn()
 {
+
 }
 void Game::printLog()
 {
@@ -157,7 +164,35 @@ void Game::printLog()
 }
 void Game::printStats()
 {
+    double drawRate = 0;
+    if(this->severalTurns!=0 && this->draws !=0) 
+        drawRate =((this->severalTurns/this->draws)*100);
+    int percentageP1Won=0;
+    if(this->severalTurns!=0 && this->player1.getnumberOfWins() !=0) 
+        percentageP1Won=((this->severalTurns/this->player1.getnumberOfWins())*100);
+    int percentageP2Won=0;
+    if(this->severalTurns!=0 && this->player2.getnumberOfWins() !=0) 
+        percentageP2Won=((this->severalTurns/this->player2.getnumberOfWins())*100);
+    
+
+    cout << endl << "----------- printStats -----------"<< endl;
+    cout << "General data about the game:"<< endl ;
+    cout << "There have been " << this->severalTurns << " turns in the game so far" << endl;
+    cout << "draw rate: " << drawRate<< "%" << endl;
+    cout << "mount of draws: " << this->draws << endl << endl;
+
+    cout << "Player1 " << player1.getname() << ":" << endl;
+    cout << "size of cardes taken is " << player1.cardesTaken() << endl;
+    cout << "he won " << this->player1.getnumberOfWins() << " times, in percentages:" << percentageP1Won <<"% " << endl << endl;
+
+    cout << "Player2 " << player2.getname() << ":" << endl;
+    cout << "size of cardes taken is " << player2.cardesTaken() << endl;
+    cout << "he won " << this->player2.getnumberOfWins() << " times, in percentages:" << percentageP2Won <<"% " << endl ;
+
+    cout <<  "-------------------------------------"<< endl;
+
 }
 Game::~Game()
 {
+
 }

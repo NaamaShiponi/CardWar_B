@@ -8,7 +8,7 @@ using namespace ariel;
 Player::~Player(){
     
 }
-Player::Player(string name): name(name){} // constructor
+Player::Player(string name): name(name), numberOfWins(0){} // constructor
 
 int Player::stacksize(){
     return cardsStack.size();
@@ -16,10 +16,6 @@ int Player::stacksize(){
 
 int Player::cardesTaken(){
     return cardesTakenPlayer.size();
-}
-
-string Player::getname(){
-    return this->name;
 }
 
 void Player::addToStackPlayer(Card card){
