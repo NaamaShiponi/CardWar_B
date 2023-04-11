@@ -32,9 +32,9 @@ void Game::createPileCards()
     
     for (int i = 0; i < 26; i++)
     {
-        player1.addToStackPlayer(deck.back());
+        this->player1.addToStackPlayer(deck.back());
         deck.pop_back();
-        player2.addToStackPlayer(deck.back());
+        this->player2.addToStackPlayer(deck.back());
         deck.pop_back();
     }
     
@@ -46,30 +46,30 @@ void Game::playTurn()
 {
     CTSp1.clear();
     CTSp2.clear();
-    if (player1.getname() == player2.getname())
+    if (this->player1.getname() == this->player2.getname())
     {
         throw std::exception();
     }
-    if (player1.stacksize() == 0 || player2.stacksize() == 0)
+    if (this->player1.stacksize() == 0 || this->player2.stacksize() == 0)
     {
         throw std::exception();
     }
 
     bool inTurn = true;
-    while (inTurn && player1.stacksize() != 0 && player2.stacksize() != 0)
+    while (inTurn && this->player1.stacksize() != 0 && this->player2.stacksize() != 0)
     {
-        CTSp1.push_back(player1.popCardsStack());
-        CTSp2.push_back(player2.popCardsStack());
+        CTSp1.push_back(this->player1.popCardsStack());
+        CTSp2.push_back(this->player2.popCardsStack());
 
         if (CTSp1.rbegin()->getNum() != CTSp2.rbegin()->getNum())
         {
             inTurn = false;
         }
-        else if (player1.stacksize() != 0 && player2.stacksize() != 0)
+        else if (this->player1.stacksize() != 0 && this->player2.stacksize() != 0)
         {
             this->draws++;
-            CTSp1.push_back(player1.popCardsStack());
-            CTSp2.push_back(player2.popCardsStack());
+            CTSp1.push_back(this->player1.popCardsStack());
+            CTSp2.push_back(this->player2.popCardsStack());
         }
         this->severalTurns++;
     }
@@ -78,11 +78,11 @@ void Game::playTurn()
 
         for (auto i = CTSp1.begin(); i != CTSp1.end(); ++i)
         {
-            player1.addToCardesTaken(*i);
+            this->player1.addToCardesTaken(*i);
         }
         for (auto i = CTSp2.begin(); i != CTSp2.end(); ++i)
         {
-            player2.addToCardesTaken(*i);
+            this->player2.addToCardesTaken(*i);
         }
     }
     /*
@@ -91,12 +91,12 @@ void Game::playTurn()
     else if ((CTSp1.rbegin()->getNum() > 2 && CTSp2.rbegin()->getNum() == 1) || (CTSp1.rbegin()->getNum() != 1 && CTSp1.rbegin()->getNum() < CTSp2.rbegin()->getNum()))
     {
         this->player2.setnumberOfWins(this->player2.getnumberOfWins()+1);
-        addCardsToTaken(player2,CTSp1,CTSp2);
+        addCardsToTaken(this->player2,CTSp1,CTSp2);
     }
     else
     { // P1 is the Winer
         this->player1.setnumberOfWins(this->player1.getnumberOfWins()+1);
-        addCardsToTaken(player1,CTSp1,CTSp2);
+        addCardsToTaken(this->player1,CTSp1,CTSp2);
     }
 
 
@@ -115,7 +115,7 @@ void Game::addCardsToTaken(Player& p, vector<Card> CTSp1, vector<Card> CTSp2 ){
 
 void Game::playAll()
 {
-    while (player1.stacksize() != 0 && player2.stacksize() != 0)
+    while (this->player1.stacksize() != 0 && this->player2.stacksize() != 0)
     {
         playTurn();
     }
@@ -124,21 +124,21 @@ void Game::playAll()
 void Game::printWiner()
 {
     cout << endl;
-    if (player1.stacksize() != 0 && player2.stacksize() != 0)
+    if (this->player1.stacksize() != 0 && this->player2.stacksize() != 0)
     {
         cout << "The game is not over yet" << endl;
     }
-    else if (player1.cardesTaken() == player2.cardesTaken())
+    else if (this->player1.cardesTaken() == this->player2.cardesTaken())
     {
         cout << "The game ended in a draw" << endl;
     }
-    else if (player1.cardesTaken() > player2.cardesTaken())
+    else if (this->player1.cardesTaken() > this->player2.cardesTaken())
     {
-        cout << player1.getname() << " won the game" << endl;
+        cout << this->player1.getname() << " won the game" << endl;
     }
     else
     {
-        cout << player2.getname() << " won the game" << endl;
+        cout << this->player2.getname() << " won the game" << endl;
     }
 }
 void Game::printLastTurn()
@@ -186,9 +186,11 @@ void Game::getStrTurn(string& s)
 void Game::printLog()
 {
     cout << endl << "----------- printLog -----------"<< endl;
-    cout << endl << log;
+    cout << endl << this->log;
     cout << endl <<  "-------------------------------"<< endl;
 }
+
+
 void Game::printStats()
 {
     double drawRate = 0;
@@ -208,12 +210,12 @@ void Game::printStats()
     cout << "draw rate: " << drawRate<< "%" << endl;
     cout << "mount of draws: " << this->draws << endl << endl;
 
-    cout << "Player1 " << player1.getname() << ":" << endl;
-    cout << "size of cardes taken is " << player1.cardesTaken() << endl;
+    cout << "Player1 " << this->player1.getname() << ":" << endl;
+    cout << "size of cardes taken is " << this->player1.cardesTaken() << endl;
     cout << "he won " << this->player1.getnumberOfWins() << " times, in percentages:" << percentageP1Won <<"% " << endl << endl;
 
-    cout << "Player2 " << player2.getname() << ":" << endl;
-    cout << "size of cardes taken is " << player2.cardesTaken() << endl;
+    cout << "Player2 " << this->player2.getname() << ":" << endl;
+    cout << "size of cardes taken is " << this->player2.cardesTaken() << endl;
     cout << "he won " << this->player2.getnumberOfWins() << " times, in percentages:" << percentageP2Won <<"% " << endl ;
 
     cout <<  "-------------------------------------"<< endl;
