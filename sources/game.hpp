@@ -13,8 +13,8 @@ namespace ariel {
         vector<Card> CTSp1;
         vector<Card> CTSp2;
         string log="";
-        int severalTurns;
-        int draws;
+        double severalTurns=0;
+        double draws=0;
 
     public:
         Game(Player& player1,Player& player2);

@@ -15,7 +15,7 @@ namespace ariel {
         string name;
         vector<Card> cardsStack;
         vector<Card> cardesTakenPlayer;
-        int numberOfWins;
+        double numberOfWins;
 
 
 
@@ -23,7 +23,7 @@ namespace ariel {
         Player(string name);// constructor
 
         string getname(){return this->name;}
-        int getnumberOfWins()const{return this->numberOfWins;}
+        double getnumberOfWins()const{return this->numberOfWins;}
         void setnumberOfWins(int n){this->numberOfWins=n;}
 
 

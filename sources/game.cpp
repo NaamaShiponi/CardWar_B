@@ -11,7 +11,7 @@ using namespace std;
 
 using namespace ariel;
 
-Game::Game(Player &p1, Player &p2) : player1(p1), player2(p2),severalTurns(0), draws(0) 
+Game::Game(Player &p1, Player &p2) : player1(p1), player2(p2) 
 {
     createPileCards();
 }
@@ -71,7 +71,8 @@ void Game::playTurn()
             CTSp1.push_back(this->player1.popCardsStack());
             CTSp2.push_back(this->player2.popCardsStack());
         }
-        this->severalTurns++;
+        severalTurns++;
+
     }
     if (inTurn)
     {
@@ -145,7 +146,7 @@ void Game::printLastTurn()
 {
     string lastTurn="";
     getStrTurn(lastTurn);
-    cout << endl << "----------- printLastTurn -----------"<< endl;
+    cout << endl << "----------- printLastTurn -----------";
     cout << endl << lastTurn;
     cout << endl <<  "-----------------------------------------"<< endl;
 
@@ -185,7 +186,7 @@ void Game::getStrTurn(string& s)
 
 void Game::printLog()
 {
-    cout << endl << "----------- printLog -----------"<< endl;
+    cout << endl << "----------- printLog -----------";
     cout << endl << this->log;
     cout << endl <<  "-------------------------------"<< endl;
 }
@@ -193,15 +194,19 @@ void Game::printLog()
 
 void Game::printStats()
 {
-    double drawRate = 0;
-    if(this->severalTurns!=0 && this->draws !=0) 
-        drawRate =((this->severalTurns/this->draws)*100);
-    int percentageP1Won=0;
-    if(this->severalTurns!=0 && this->player1.getnumberOfWins() !=0) 
-        percentageP1Won=((this->severalTurns/this->player1.getnumberOfWins())*100);
-    int percentageP2Won=0;
-    if(this->severalTurns!=0 && this->player2.getnumberOfWins() !=0) 
-        percentageP2Won=((this->severalTurns/this->player2.getnumberOfWins())*100);
+
+    double drawRate = 0.0;
+    if(this->severalTurns!=0 && this->draws !=0) {
+        drawRate =((this->draws/this->severalTurns)*100);
+    }
+    double percentageP1Won=0.0;
+    if(this->severalTurns!=0 && this->player1.getnumberOfWins() !=0) {
+        percentageP1Won=((this->player1.getnumberOfWins()/this->severalTurns)*100);
+    }
+    double percentageP2Won=0.0;
+    if(this->severalTurns!=0 && this->player2.getnumberOfWins() !=0) {
+        percentageP2Won=((this->player2.getnumberOfWins()/this->severalTurns)*100);
+    }
     
 
     cout << endl << "----------- printStats -----------"<< endl;
