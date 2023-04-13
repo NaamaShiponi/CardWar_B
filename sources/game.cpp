@@ -16,7 +16,7 @@ Game::Game(Player &p1, Player &p2) : player1(p1), player2(p2)
     createPileCards();
 }
 
-
+// This function creates a new pile of cards, consisting of cards with numbers between 1 and 13, and suits between 1 and 4.
 void Game::createPileCards()
 {
     vector<Card> deck;
@@ -28,8 +28,10 @@ void Game::createPileCards()
         }
     }
 
+    // Randomly shuffle 
     random_shuffle(deck.begin(), deck.end());
     
+    // Distribute the cards equally between the two players
     for (int i = 0; i < 26; i++)
     {
         this->player1.addToStackPlayer(deck.back());
@@ -41,32 +43,37 @@ void Game::createPileCards()
 }
 
 
-
+// This function represents a turn in the game.
 void Game::playTurn()
 {
     CTSp1.clear();
     CTSp2.clear();
-    if (this->player1.getname() == this->player2.getname())
+    if (&player1 == &player2)
     {
+        // If player 1 and player 2 are the same, an exception is thrown.
         throw std::exception();
     }
     if (this->player1.stacksize() == 0 || this->player2.stacksize() == 0)
     {
+        // If one of the players has no cards left, an exception is thrown.
         throw std::exception();
     }
 
     bool inTurn = true;
     while (inTurn && this->player1.stacksize() != 0 && this->player2.stacksize() != 0)
     {
+        // Each player draws a card from the top of their deck.
         CTSp1.push_back(this->player1.popCardsStack());
         CTSp2.push_back(this->player2.popCardsStack());
 
         if (CTSp1.rbegin()->getNum() != CTSp2.rbegin()->getNum())
         {
+            // If the cards drawn by the players have different numbers, the turn is over.
             inTurn = false;
         }
         else if (this->player1.stacksize() != 0 && this->player2.stacksize() != 0)
         {
+            // If the cards drawn by the players have the same number and both players still have cards in their deck, another draw is made.
             this->draws++;
             CTSp1.push_back(this->player1.popCardsStack());
             CTSp2.push_back(this->player2.popCardsStack());
@@ -76,7 +83,7 @@ void Game::playTurn()
     }
     if (inTurn)
     {
-
+        
         for (auto i = CTSp1.begin(); i != CTSp1.end(); ++i)
         {
             this->player1.addToCardesTaken(*i);
@@ -114,6 +121,7 @@ void Game::addCardsToTaken(Player& p, vector<Card> CTSp1, vector<Card> CTSp2 ){
     }
 }
 
+// This function plays the game that players run out of cards in the pile.
 void Game::playAll()
 {
     while (this->player1.stacksize() != 0 && this->player2.stacksize() != 0)
@@ -122,6 +130,7 @@ void Game::playAll()
     }
 }
 
+// This function prints the winner of the game, or a message if the game is not over.
 void Game::printWiner()
 {
     cout << endl;
@@ -142,6 +151,8 @@ void Game::printWiner()
         cout << this->player2.getname() << " won the game" << endl;
     }
 }
+
+// This function prints the last turn of the game.
 void Game::printLastTurn()
 {
     string lastTurn="";
@@ -152,6 +163,8 @@ void Game::printLastTurn()
 
 
 }
+
+// This function returns the string representation of the last turn of the game.
 void Game::getStrTurn(string& s)
 {
     int numCardP1;
